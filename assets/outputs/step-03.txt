@@ -1,0 +1,129 @@
+ÔùÅ List directory Specs
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema
+  Ôöö 5 files found
+
+ÔùÅ List directory Schema\Tables
+  Ôöö 4 files found
+
+ÔùÅ List directory Schema\Triggers
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Views
+  Ôöö 1 file found
+
+ÔùÅ List directory Specs\schema-spec
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures
+  Ôöö 2 files found
+
+ÔùÅ List directory Schema\Tables\Trading
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Inventory
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\CropManagement
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema\Tables\Members
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\Settlement
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions\Scalar
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\CropPlanning
+  Ôöö 1 file found
+
+Now let me read all the actual SQL files and the specification:
+
+ÔùÅ Read Fields.sql
+  Ôöé Schema\Tables\CropManagement\Fields.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Schema\Tables\CropManagement\CropTypes.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read Harvests.sql
+  Ôöé Schema\Tables\CropManagement\Harvests.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read FertilizerStock.sql
+  Ôöé Schema\Tables\Inventory\FertilizerStock.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read MemberAccounts.sql
+  Ôöé Schema\Tables\Members\MemberAccounts.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read CommodityPrices.sql
+  Ôöé Schema\Tables\Trading\CommodityPrices.sql
+  Ôöö 11 lines read
+
+ÔùÅ Read fn_CalculateYieldBushels.sql
+  Ôöé Schema\Functions\Scalar\fn_CalculateYieldBushels.sql
+  Ôöö 22 lines read
+
+ÔùÅ Read sp_CalculateOptimalRotation.sql
+  Ôöé Schema\StoredProcedures\CropPlanning\sp_CalculateOptimalRotation.sql
+  Ôöö 46 lines read
+
+ÔùÅ Read tr_AuditHarvestChanges.sql
+  Ôöé Schema\Triggers\tr_AuditHarvestChanges.sql
+  Ôöö 27 lines read
+
+ÔùÅ Read sp_CalculateMemberPayment.sql
+  Ôöé Schema\StoredProcedures\Settlement\sp_CalculateMemberPayment.sql
+  Ôöö 50 lines read
+
+ÔùÅ Read vw_FieldProductivity.sql
+  Ôöé Schema\Views\vw_FieldProductivity.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read database-specification.md
+  Ôöé Specs\schema-spec\database-specification.md
+  Ôöö 152 lines read
+
+Now I have all the source material. Let me create the complexity analysis document.
+
+ÔùÅ Ensure output directory exists (shell)
+  Ôöé if (-not (Test-Path
+  Ôöé "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\assets\outputs"))
+  Ôöé { New-Item -ItemType Directory -Path
+  Ôöé "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\assets\outputs"
+  Ôöé -Force }
+  Ôöö 1 line...
+
+ÔùÅ Create step-03-migration-complexity.md +704
+  Ôöö assets\outputs\step-03-migration-complexity.md
+
+Now let me verify the file was created correctly:
+
+ÔùÅ Verify output file (shell)
+  Ôöé (Get-Content "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\asse
+  Ôöé ts\outputs\step-03-migration-complexity.md" | Measure-Object -Line
+  Ôöé -Word).Lines
+  Ôöö 2 lines...
+
+The migration complexity analysis has been written to `assets/outputs/step-03-migration-complexity.md` (551 lines). Here's a summary:
+
+**Key findings:**
+- **4 Critical objects:** Harvests table (computed column + UDF), `fn_CalculateYieldBushels` (referenced by generated column), `sp_CalculateMemberPayment` (OUTPUT params, MONEY arithmetic), `tr_AuditHarvestChanges` (FOR JSON AUTO, FULL OUTER JOIN on inserted/deleted)
+- **2 High objects:** Fields table (GEOGRAPHY ÔåÆ PostGIS), `sp_CalculateOptimalRotation` (CTE scoring)
+- **3 Blockers:** UDF in computed column, PostGIS provisioning, missing audit table DDL
+- **Total effort estimate:** ~53.5 hours (7 developer-days)
+- **8-phase migration order** respecting FK and functional dependencies
+
+
+Changes   +704 -0
+Requests  3 Premium (4m 2s)
+Tokens    Ôåæ 270.4k ÔÇó Ôåô 14.2k ÔÇó 220.3k (cached)
