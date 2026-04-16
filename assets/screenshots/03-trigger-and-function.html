@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GreenHarvest – Trigger &amp; UDF</title>
+<style>
+  body { background: #1e1e2e; color: #cdd6f4; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; margin: 0; padding: 32px; }
+  .header { background: linear-gradient(135deg, #313244, #45475a); border-radius: 12px; padding: 20px 28px; margin-bottom: 24px; border-left: 4px solid #fab387; }
+  .header h1 { margin: 0; font-size: 20px; color: #fab387; }
+  .header p  { margin: 6px 0 0; font-size: 13px; color: #a6adc8; }
+  .card { background: #181825; border: 1px solid #313244; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+  .card-title { background: #313244; padding: 10px 18px; font-size: 13px; color: #f9e2af; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .card-title .badge { background: #fab38722; color: #fab387; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+  pre { margin: 0; padding: 18px; font-size: 13px; line-height: 1.6; overflow-x: auto; }
+  .kw  { color: #cba6f7; font-weight: 600; }
+  .typ { color: #89b4fa; }
+  .str { color: #a6e3a1; }
+  .num { color: #fab387; }
+  .cmt { color: #6c7086; font-style: italic; }
+  .fn  { color: #f9e2af; }
+  .op  { color: #89dceb; }
+  .col { color: #cdd6f4; }
+  .tbl { color: #f5c2e7; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ GreenHarvest – Trigger &amp; Scalar Function</h1>
+  <p>SQL Server T-SQL · Audit trigger for regulatory compliance · UDF for unit conversion</p>
+</div>
+
+<!-- Trigger -->
+<div class="card">
+  <div class="card-title">🔔 tr_AuditHarvestChanges <span class="badge">Trigger · AFTER INSERT, UPDATE, DELETE</span></div>
+  <pre>
+<span class="kw">CREATE TRIGGER</span> <span class="fn">tr_AuditHarvestChanges</span>
+<span class="kw">ON</span> <span class="tbl">CropManagement.Harvests</span>
+<span class="kw">AFTER INSERT, UPDATE, DELETE</span>
+<span class="kw">AS</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">SET NOCOUNT ON</span>;
+
+    <span class="cmt">-- Log all changes to harvests for regulatory compliance</span>
+    <span class="kw">IF EXISTS</span> (<span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="col">inserted</span>)
+    <span class="kw">BEGIN</span>
+        <span class="kw">INSERT INTO</span> <span class="tbl">Audit.HarvestAuditLog</span>
+            (<span class="col">HarvestId</span>, <span class="col">ChangeType</span>, <span class="col">ChangedBy</span>, <span class="col">ChangeDate</span>, <span class="col">OldValue</span>, <span class="col">NewValue</span>)
+        <span class="kw">SELECT</span>
+            <span class="fn">COALESCE</span>(<span class="col">i.HarvestId</span>, <span class="col">d.HarvestId</span>),
+            <span class="kw">CASE</span>
+                <span class="kw">WHEN</span> <span class="col">i.HarvestId</span> <span class="kw">IS NOT NULL AND</span> <span class="col">d.HarvestId</span> <span class="kw">IS NULL</span>     <span class="kw">THEN</span> <span class="str">'INSERT'</span>
+                <span class="kw">WHEN</span> <span class="col">i.HarvestId</span> <span class="kw">IS NOT NULL AND</span> <span class="col">d.HarvestId</span> <span class="kw">IS NOT NULL</span> <span class="kw">THEN</span> <span class="str">'UPDATE'</span>
+                <span class="kw">ELSE</span> <span class="str">'DELETE'</span>
+            <span class="kw">END</span>,
+            <span class="fn">SUSER_SNAME</span>(),
+            <span class="fn">GETDATE</span>(),
+            (<span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="col">deleted</span> <span class="col">d2</span>
+             <span class="kw">WHERE</span> <span class="col">d2.HarvestId</span> <span class="op">=</span> <span class="fn">COALESCE</span>(<span class="col">i.HarvestId</span>, <span class="col">d.HarvestId</span>)
+             <span class="kw">FOR JSON AUTO</span>),
+            (<span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="col">inserted</span> <span class="col">i2</span>
+             <span class="kw">WHERE</span> <span class="col">i2.HarvestId</span> <span class="op">=</span> <span class="col">i.HarvestId</span>
+             <span class="kw">FOR JSON AUTO</span>)
+        <span class="kw">FROM</span> <span class="col">inserted</span> <span class="col">i</span>
+        <span class="kw">FULL OUTER JOIN</span> <span class="col">deleted</span> <span class="col">d</span> <span class="kw">ON</span> <span class="col">i.HarvestId</span> <span class="op">=</span> <span class="col">d.HarvestId</span>;
+    <span class="kw">END</span>
+<span class="kw">END</span>
+<span class="kw">GO</span>
+  </pre>
+</div>
+
+<!-- Scalar Function -->
+<div class="card">
+  <div class="card-title">🧮 fn_CalculateYieldBushels <span class="badge">Scalar Function · dbo</span></div>
+  <pre>
+<span class="kw">CREATE FUNCTION</span> <span class="fn">dbo.fn_CalculateYieldBushels</span>
+(
+    <span class="col">@Quantity</span> <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>),
+    <span class="col">@UnitType</span> <span class="typ">NVARCHAR</span>(<span class="num">20</span>)
+)
+<span class="kw">RETURNS</span> <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>)
+<span class="kw">AS</span>
+<span class="kw">BEGIN</span>
+    <span class="kw">DECLARE</span> <span class="col">@Bushels</span> <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>);
+
+    <span class="cmt">-- Convert various units to bushels</span>
+    <span class="kw">SET</span> <span class="col">@Bushels</span> <span class="op">=</span> <span class="kw">CASE</span> <span class="col">@UnitType</span>
+        <span class="kw">WHEN</span> <span class="str">'bushels'</span>      <span class="kw">THEN</span> <span class="col">@Quantity</span>
+        <span class="kw">WHEN</span> <span class="str">'tonnes'</span>       <span class="kw">THEN</span> <span class="col">@Quantity</span> <span class="op">*</span> <span class="num">36.7437</span>   <span class="cmt">-- 1 tonne = 36.7437 bu (wheat)</span>
+        <span class="kw">WHEN</span> <span class="str">'hundredweight'</span> <span class="kw">THEN</span> <span class="col">@Quantity</span> <span class="op">*</span> <span class="num">1.667</span>    <span class="cmt">-- 1 cwt = 1.667 bu</span>
+        <span class="kw">WHEN</span> <span class="str">'kilograms'</span>    <span class="kw">THEN</span> <span class="col">@Quantity</span> <span class="op">*</span> <span class="num">0.0367437</span>
+        <span class="kw">ELSE</span> <span class="col">@Quantity</span>     <span class="cmt">-- default: assume bushels</span>
+    <span class="kw">END</span>;
+
+    <span class="kw">RETURN</span> <span class="col">@Bushels</span>;
+<span class="kw">END</span>
+<span class="kw">GO</span>
+  </pre>
+</div>
+
+<!-- View -->
+<div class="card">
+  <div class="card-title">📊 vw_FieldProductivity <span class="badge">View · CropManagement</span></div>
+  <pre>
+<span class="kw">CREATE VIEW</span> <span class="fn">CropManagement.vw_FieldProductivity</span>
+<span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    <span class="col">f.FieldId</span>,
+    <span class="col">f.FieldName</span>,
+    <span class="col">m.MemberNumber</span>,
+    <span class="col">m.FirstName</span> <span class="op">+</span> <span class="str">' '</span> <span class="op">+</span> <span class="col">m.LastName</span> <span class="kw">AS</span> <span class="col">MemberName</span>,
+    <span class="col">f.Acreage</span>,
+    <span class="col">ct.Name</span> <span class="kw">AS</span> <span class="col">CurrentCrop</span>,
+    <span class="kw">SUM</span>(<span class="col">h.YieldBushels</span>)              <span class="kw">AS</span> <span class="col">TotalYield</span>,
+    <span class="kw">SUM</span>(<span class="col">h.YieldBushels</span>) <span class="op">/</span> <span class="col">f.Acreage</span> <span class="kw">AS</span> <span class="col">YieldPerAcre</span>,
+    <span class="kw">COUNT</span>(<span class="col">h.HarvestId</span>)              <span class="kw">AS</span> <span class="col">HarvestCount</span>,
+    <span class="kw">MAX</span>(<span class="col">h.HarvestDate</span>)              <span class="kw">AS</span> <span class="col">LastHarvestDate</span>
+<span class="kw">FROM</span> <span class="tbl">CropManagement.Fields</span> <span class="col">f</span>
+<span class="kw">INNER JOIN</span> <span class="tbl">Members.MemberAccounts</span> <span class="col">m</span>  <span class="kw">ON</span> <span class="col">f.MemberId</span>      <span class="op">=</span> <span class="col">m.MemberId</span>
+<span class="kw">LEFT JOIN</span>  <span class="tbl">CropManagement.CropTypes</span> <span class="col">ct</span> <span class="kw">ON</span> <span class="col">f.CurrentCropId</span> <span class="op">=</span> <span class="col">ct.CropTypeId</span>
+<span class="kw">LEFT JOIN</span>  <span class="tbl">CropManagement.Harvests</span> <span class="col">h</span>  <span class="kw">ON</span> <span class="col">f.FieldId</span>       <span class="op">=</span> <span class="col">h.FieldId</span>
+<span class="kw">GROUP BY</span> <span class="col">f.FieldId</span>, <span class="col">f.FieldName</span>, <span class="col">m.MemberNumber</span>,
+         <span class="col">m.FirstName</span>, <span class="col">m.LastName</span>, <span class="col">f.Acreage</span>, <span class="col">ct.Name</span>;
+<span class="kw">GO</span>
+  </pre>
+</div>
+
+</body>
+</html>

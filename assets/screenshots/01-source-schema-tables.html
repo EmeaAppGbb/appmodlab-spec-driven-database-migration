@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GreenHarvest – Source Schema Tables (SQL Server)</title>
+<style>
+  body { background: #1e1e2e; color: #cdd6f4; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; margin: 0; padding: 32px; }
+  .header { background: linear-gradient(135deg, #313244, #45475a); border-radius: 12px; padding: 20px 28px; margin-bottom: 24px; border-left: 4px solid #89b4fa; }
+  .header h1 { margin: 0; font-size: 20px; color: #89b4fa; }
+  .header p  { margin: 6px 0 0; font-size: 13px; color: #a6adc8; }
+  .card { background: #181825; border: 1px solid #313244; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+  .card-title { background: #313244; padding: 10px 18px; font-size: 13px; color: #f5c2e7; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .card-title .badge { background: #89b4fa22; color: #89b4fa; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+  pre { margin: 0; padding: 18px; font-size: 13px; line-height: 1.6; overflow-x: auto; }
+  .kw  { color: #cba6f7; font-weight: 600; }
+  .typ { color: #89b4fa; }
+  .str { color: #a6e3a1; }
+  .num { color: #fab387; }
+  .cmt { color: #6c7086; font-style: italic; }
+  .fn  { color: #f9e2af; }
+  .op  { color: #89dceb; }
+  .col { color: #cdd6f4; }
+  .tbl { color: #f5c2e7; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌾 GreenHarvest – Source Schema Tables</h1>
+  <p>SQL Server 2012 · Legacy schema with 4 domain schemas · 6 core tables shown</p>
+</div>
+
+<!-- CropTypes -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/CropManagement/CropTypes.sql <span class="badge">CropManagement</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">CropManagement.CropTypes</span> (
+    <span class="col">CropTypeId</span>       <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">Name</span>             <span class="typ">NVARCHAR</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">GrowingSeason</span>    <span class="typ">NVARCHAR</span>(<span class="num">50</span>)  <span class="kw">NOT NULL</span>,
+    <span class="col">DaysToMaturity</span>   <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="col">MinTemperature</span>   <span class="typ">DECIMAL</span>(<span class="num">5</span>,<span class="num">2</span>),
+    <span class="col">MaxTemperature</span>   <span class="typ">DECIMAL</span>(<span class="num">5</span>,<span class="num">2</span>),
+    <span class="col">WaterRequirement</span> <span class="typ">NVARCHAR</span>(<span class="num">20</span>),
+    <span class="col">CreatedDate</span>      <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="col">ModifiedDate</span>     <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>()
+);
+
+<span class="kw">CREATE INDEX</span> <span class="col">IX_CropTypes_Name</span>   <span class="kw">ON</span> <span class="tbl">CropManagement.CropTypes</span>(<span class="col">Name</span>);
+<span class="kw">CREATE INDEX</span> <span class="col">IX_CropTypes_Season</span> <span class="kw">ON</span> <span class="tbl">CropManagement.CropTypes</span>(<span class="col">GrowingSeason</span>);
+  </pre>
+</div>
+
+<!-- Fields -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/CropManagement/Fields.sql <span class="badge">CropManagement</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">CropManagement.Fields</span> (
+    <span class="col">FieldId</span>       <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">MemberId</span>      <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="col">FieldName</span>     <span class="typ">NVARCHAR</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">Acreage</span>       <span class="typ">DECIMAL</span>(<span class="num">10</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">SoilType</span>      <span class="typ">NVARCHAR</span>(<span class="num">50</span>),
+    <span class="col">IrrigationType</span> <span class="typ">NVARCHAR</span>(<span class="num">50</span>),
+    <span class="col">GPSBoundary</span>   <span class="typ">GEOGRAPHY</span>,
+    <span class="col">CurrentCropId</span> <span class="typ">INT</span>,
+    <span class="col">CreatedDate</span>   <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="col">ModifiedDate</span>  <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="kw">CONSTRAINT</span> <span class="col">FK_Fields_Member</span>      <span class="kw">FOREIGN KEY</span> (<span class="col">MemberId</span>)      <span class="kw">REFERENCES</span> <span class="tbl">Members.MemberAccounts</span>(<span class="col">MemberId</span>),
+    <span class="kw">CONSTRAINT</span> <span class="col">FK_Fields_CurrentCrop</span> <span class="kw">FOREIGN KEY</span> (<span class="col">CurrentCropId</span>) <span class="kw">REFERENCES</span> <span class="tbl">CropManagement.CropTypes</span>(<span class="col">CropTypeId</span>)
+);
+  </pre>
+</div>
+
+<!-- Harvests -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/CropManagement/Harvests.sql <span class="badge">CropManagement</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">CropManagement.Harvests</span> (
+    <span class="col">HarvestId</span>       <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">FieldId</span>         <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="col">CropTypeId</span>      <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="col">HarvestDate</span>     <span class="typ">DATE</span> <span class="kw">NOT NULL</span>,
+    <span class="col">YieldBushels</span>    <span class="kw">AS</span> (<span class="fn">dbo.fn_CalculateYieldBushels</span>(<span class="col">Quantity</span>, <span class="col">UnitType</span>)) <span class="kw">PERSISTED</span>,
+    <span class="col">Quantity</span>        <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">UnitType</span>        <span class="typ">NVARCHAR</span>(<span class="num">20</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">MoistureContent</span> <span class="typ">DECIMAL</span>(<span class="num">5</span>,<span class="num">2</span>),
+    <span class="col">GradeCode</span>       <span class="typ">NVARCHAR</span>(<span class="num">10</span>),
+    <span class="col">CreatedDate</span>     <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="kw">CONSTRAINT</span> <span class="col">FK_Harvests_Field</span>    <span class="kw">FOREIGN KEY</span> (<span class="col">FieldId</span>)    <span class="kw">REFERENCES</span> <span class="tbl">CropManagement.Fields</span>(<span class="col">FieldId</span>),
+    <span class="kw">CONSTRAINT</span> <span class="col">FK_Harvests_CropType</span> <span class="kw">FOREIGN KEY</span> (<span class="col">CropTypeId</span>) <span class="kw">REFERENCES</span> <span class="tbl">CropManagement.CropTypes</span>(<span class="col">CropTypeId</span>)
+);
+  </pre>
+</div>
+
+<!-- MemberAccounts -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/Members/MemberAccounts.sql <span class="badge">Members</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">Members.MemberAccounts</span> (
+    <span class="col">MemberId</span>       <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">MemberNumber</span>   <span class="typ">NVARCHAR</span>(<span class="num">20</span>) <span class="kw">UNIQUE NOT NULL</span>,
+    <span class="col">FirstName</span>      <span class="typ">NVARCHAR</span>(<span class="num">50</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">LastName</span>       <span class="typ">NVARCHAR</span>(<span class="num">50</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">Email</span>          <span class="typ">NVARCHAR</span>(<span class="num">100</span>),
+    <span class="col">PhoneNumber</span>    <span class="typ">NVARCHAR</span>(<span class="num">20</span>),
+    <span class="col">Address</span>        <span class="typ">NVARCHAR</span>(<span class="num">200</span>),
+    <span class="col">City</span>           <span class="typ">NVARCHAR</span>(<span class="num">50</span>),
+    <span class="col">State</span>          <span class="typ">NVARCHAR</span>(<span class="num">2</span>),
+    <span class="col">ZipCode</span>        <span class="typ">NVARCHAR</span>(<span class="num">10</span>),
+    <span class="col">MembershipDate</span> <span class="typ">DATE</span> <span class="kw">NOT NULL</span>,
+    <span class="col">Status</span>         <span class="typ">NVARCHAR</span>(<span class="num">20</span>) <span class="kw">DEFAULT</span> <span class="str">'Active'</span>,
+    <span class="col">CreatedDate</span>    <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="col">ModifiedDate</span>   <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>()
+);
+  </pre>
+</div>
+
+<!-- FertilizerStock -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/Inventory/FertilizerStock.sql <span class="badge">Inventory</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">Inventory.FertilizerStock</span> (
+    <span class="col">StockId</span>          <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">ProductName</span>      <span class="typ">NVARCHAR</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">ManufacturerName</span> <span class="typ">NVARCHAR</span>(<span class="num">100</span>),
+    <span class="col">QuantityOnHand</span>   <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">Unit</span>             <span class="typ">NVARCHAR</span>(<span class="num">20</span>) <span class="kw">NOT NULL</span>,
+    <span class="col">CostPerUnit</span>      <span class="typ">MONEY</span> <span class="kw">NOT NULL</span>,
+    <span class="col">ReorderLevel</span>     <span class="typ">DECIMAL</span>(<span class="num">12</span>,<span class="num">2</span>),
+    <span class="col">LastRestockDate</span>  <span class="typ">DATE</span>,
+    <span class="col">ExpirationDate</span>   <span class="typ">DATE</span>,
+    <span class="col">CreatedDate</span>      <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>()
+);
+  </pre>
+</div>
+
+<!-- CommodityPrices -->
+<div class="card">
+  <div class="card-title">📁 Schema/Tables/Trading/CommodityPrices.sql <span class="badge">Trading</span></div>
+  <pre>
+<span class="kw">CREATE TABLE</span> <span class="tbl">Trading.CommodityPrices</span> (
+    <span class="col">PriceId</span>        <span class="typ">INT</span> <span class="kw">PRIMARY KEY</span> <span class="fn">IDENTITY</span>(<span class="num">1</span>,<span class="num">1</span>),
+    <span class="col">CropTypeId</span>     <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="col">MarketDate</span>     <span class="typ">DATE</span> <span class="kw">NOT NULL</span>,
+    <span class="col">PricePerBushel</span> <span class="typ">MONEY</span> <span class="kw">NOT NULL</span>,
+    <span class="col">MarketName</span>     <span class="typ">NVARCHAR</span>(<span class="num">100</span>),
+    <span class="col">CreatedDate</span>    <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">GETDATE</span>(),
+    <span class="kw">CONSTRAINT</span> <span class="col">FK_Prices_CropType</span> <span class="kw">FOREIGN KEY</span> (<span class="col">CropTypeId</span>) <span class="kw">REFERENCES</span> <span class="tbl">CropManagement.CropTypes</span>(<span class="col">CropTypeId</span>)
+);
+  </pre>
+</div>
+
+</body>
+</html>

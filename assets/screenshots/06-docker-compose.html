@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GreenHarvest – Docker Compose &amp; Infrastructure</title>
+<style>
+  body { background: #1e1e2e; color: #cdd6f4; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; margin: 0; padding: 32px; }
+  .header { background: linear-gradient(135deg, #313244, #45475a); border-radius: 12px; padding: 20px 28px; margin-bottom: 24px; border-left: 4px solid #89dceb; }
+  .header h1 { margin: 0; font-size: 20px; color: #89dceb; }
+  .header p  { margin: 6px 0 0; font-size: 13px; color: #a6adc8; }
+  .card { background: #181825; border: 1px solid #313244; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+  .card-title { background: #313244; padding: 10px 18px; font-size: 13px; color: #f9e2af; font-weight: 600; }
+  pre { margin: 0; padding: 18px; font-size: 13px; line-height: 1.6; overflow-x: auto; }
+  .kw  { color: #cba6f7; font-weight: 600; }
+  .str { color: #a6e3a1; }
+  .num { color: #fab387; }
+  .cmt { color: #6c7086; font-style: italic; }
+  .key { color: #89b4fa; }
+  .val { color: #f9e2af; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐳 GreenHarvest – Docker Compose Infrastructure</h1>
+  <p>docker-compose.yml · SQL Server 2019 source + PostgreSQL 16 target + PostGIS 3.4</p>
+</div>
+
+<div class="card">
+  <div class="card-title">📦 docker-compose.yml</div>
+  <pre>
+<span class="key">version</span>: <span class="str">'3.8'</span>
+
+<span class="key">services</span>:
+  <span class="val">sqlserver</span>:
+    <span class="key">image</span>: <span class="str">mcr.microsoft.com/mssql/server:2019-latest</span>
+    <span class="key">environment</span>:
+      <span class="key">ACCEPT_EULA</span>: <span class="str">Y</span>
+      <span class="key">SA_PASSWORD</span>: <span class="str">GreenHarvest2024!</span>
+      <span class="key">MSSQL_PID</span>:  <span class="str">Developer</span>
+    <span class="key">ports</span>:
+      - <span class="str">"1433:1433"</span>
+    <span class="key">volumes</span>:
+      - <span class="val">sqlserver-data</span>:<span class="str">/var/opt/mssql</span>
+
+  <span class="val">postgres</span>:
+    <span class="key">image</span>: <span class="str">postgres:16</span>
+    <span class="key">environment</span>:
+      <span class="key">POSTGRES_DB</span>:       <span class="str">greenharvest</span>
+      <span class="key">POSTGRES_USER</span>:     <span class="str">postgres</span>
+      <span class="key">POSTGRES_PASSWORD</span>: <span class="str">postgres</span>
+    <span class="key">ports</span>:
+      - <span class="str">"5432:5432"</span>
+    <span class="key">volumes</span>:
+      - <span class="val">postgres-data</span>:<span class="str">/var/lib/postgresql/data</span>
+
+  <span class="val">postgis</span>:
+    <span class="key">image</span>: <span class="str">postgis/postgis:16-3.4</span>
+    <span class="key">environment</span>:
+      <span class="key">POSTGRES_DB</span>:       <span class="str">greenharvest</span>
+      <span class="key">POSTGRES_USER</span>:     <span class="str">postgres</span>
+      <span class="key">POSTGRES_PASSWORD</span>: <span class="str">postgres</span>
+    <span class="key">ports</span>:
+      - <span class="str">"5433:5432"</span>
+    <span class="key">volumes</span>:
+      - <span class="val">postgis-data</span>:<span class="str">/var/lib/postgresql/data</span>
+
+<span class="key">volumes</span>:
+  <span class="val">sqlserver-data</span>:
+  <span class="val">postgres-data</span>:
+  <span class="val">postgis-data</span>:
+  </pre>
+</div>
+
+</body>
+</html>

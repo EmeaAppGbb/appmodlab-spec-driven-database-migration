@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GreenHarvest – Validation Queries &amp; Seed Data</title>
+<style>
+  body { background: #1e1e2e; color: #cdd6f4; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; margin: 0; padding: 32px; }
+  .header { background: linear-gradient(135deg, #313244, #45475a); border-radius: 12px; padding: 20px 28px; margin-bottom: 24px; border-left: 4px solid #94e2d5; }
+  .header h1 { margin: 0; font-size: 20px; color: #94e2d5; }
+  .header p  { margin: 6px 0 0; font-size: 13px; color: #a6adc8; }
+  .card { background: #181825; border: 1px solid #313244; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+  .card-title { background: #313244; padding: 10px 18px; font-size: 13px; color: #89dceb; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .card-title .badge { background: #94e2d522; color: #94e2d5; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+  pre { margin: 0; padding: 18px; font-size: 13px; line-height: 1.6; overflow-x: auto; }
+  .kw  { color: #cba6f7; font-weight: 600; }
+  .typ { color: #89b4fa; }
+  .str { color: #a6e3a1; }
+  .num { color: #fab387; }
+  .cmt { color: #6c7086; font-style: italic; }
+  .fn  { color: #f9e2af; }
+  .op  { color: #89dceb; }
+  .col { color: #cdd6f4; }
+  .tbl { color: #f5c2e7; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>✅ GreenHarvest – Validation Queries &amp; Seed Data</h1>
+  <p>Migration/Validation · Data/SeedData · Completeness checks &amp; reference data</p>
+</div>
+
+<!-- Row Count Validation -->
+<div class="card">
+  <div class="card-title">📊 Row Count Validation <span class="badge">validation_queries.sql</span></div>
+  <pre>
+<span class="cmt">-- 1. Row count validation</span>
+<span class="kw">SELECT</span>
+    <span class="str">'crop_types'</span> <span class="kw">AS</span> <span class="col">table_name</span>,
+    <span class="kw">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> <span class="col">row_count</span>
+<span class="kw">FROM</span> <span class="tbl">crop_management.crop_types</span>
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span> <span class="str">'member_accounts'</span>, <span class="kw">COUNT</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="tbl">members.member_accounts</span>
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span> <span class="str">'fields'</span>,          <span class="kw">COUNT</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="tbl">crop_management.fields</span>
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span> <span class="str">'harvests'</span>,        <span class="kw">COUNT</span>(<span class="op">*</span>) <span class="kw">FROM</span> <span class="tbl">crop_management.harvests</span>;
+  </pre>
+</div>
+
+<!-- Computed Column Validation -->
+<div class="card">
+  <div class="card-title">🧮 Computed Column Validation <span class="badge">yield_bushels check</span></div>
+  <pre>
+<span class="cmt">-- 2. Verify yield_bushels calculation matches source</span>
+<span class="kw">SELECT</span>
+    <span class="col">harvest_id</span>,
+    <span class="col">quantity</span>,
+    <span class="col">unit_type</span>,
+    <span class="col">yield_bushels</span>,
+    <span class="fn">crop_management.calculate_yield_bushels</span>(<span class="col">quantity</span>, <span class="col">unit_type</span>) <span class="kw">AS</span> <span class="col">calculated_yield</span>,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> <span class="col">yield_bushels</span> <span class="op">=</span> <span class="fn">crop_management.calculate_yield_bushels</span>(<span class="col">quantity</span>, <span class="col">unit_type</span>)
+        <span class="kw">THEN</span> <span class="str">'PASS'</span>
+        <span class="kw">ELSE</span> <span class="str">'FAIL'</span>
+    <span class="kw">END AS</span> <span class="col">validation_status</span>
+<span class="kw">FROM</span> <span class="tbl">crop_management.harvests</span>
+<span class="kw">LIMIT</span> <span class="num">100</span>;
+  </pre>
+</div>
+
+<!-- FK Integrity -->
+<div class="card">
+  <div class="card-title">🔗 Foreign Key Integrity Check <span class="badge">orphan detection</span></div>
+  <pre>
+<span class="cmt">-- 3. Foreign key integrity validation</span>
+<span class="kw">SELECT</span>
+    <span class="str">'Orphaned fields (no member)'</span> <span class="kw">AS</span> <span class="col">check_name</span>,
+    <span class="kw">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> <span class="col">issue_count</span>
+<span class="kw">FROM</span> <span class="tbl">crop_management.fields</span> <span class="col">f</span>
+<span class="kw">LEFT JOIN</span> <span class="tbl">members.member_accounts</span> <span class="col">m</span> <span class="kw">ON</span> <span class="col">f.member_id</span> <span class="op">=</span> <span class="col">m.member_id</span>
+<span class="kw">WHERE</span> <span class="col">m.member_id</span> <span class="kw">IS NULL</span>
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span>
+    <span class="str">'Orphaned harvests (no field)'</span>,
+    <span class="kw">COUNT</span>(<span class="op">*</span>)
+<span class="kw">FROM</span> <span class="tbl">crop_management.harvests</span> <span class="col">h</span>
+<span class="kw">LEFT JOIN</span> <span class="tbl">crop_management.fields</span> <span class="col">f</span> <span class="kw">ON</span> <span class="col">h.field_id</span> <span class="op">=</span> <span class="col">f.field_id</span>
+<span class="kw">WHERE</span> <span class="col">f.field_id</span> <span class="kw">IS NULL</span>;
+  </pre>
+</div>
+
+<!-- Seed Data -->
+<div class="card">
+  <div class="card-title">🌱 Seed Data: CropTypes <span class="badge">Data/SeedData</span></div>
+  <pre>
+<span class="kw">INSERT INTO</span> <span class="tbl">CropManagement.CropTypes</span>
+    (<span class="col">Name</span>, <span class="col">GrowingSeason</span>, <span class="col">DaysToMaturity</span>, <span class="col">MinTemperature</span>, <span class="col">MaxTemperature</span>, <span class="col">WaterRequirement</span>)
+<span class="kw">VALUES</span>
+    (<span class="str">'Corn'</span>,     <span class="str">'Spring/Summer'</span>, <span class="num">120</span>, <span class="num">10.0</span>, <span class="num">30.0</span>, <span class="str">'High'</span>),
+    (<span class="str">'Soybeans'</span>, <span class="str">'Spring/Summer'</span>, <span class="num">100</span>, <span class="num">15.0</span>, <span class="num">28.0</span>, <span class="str">'Medium'</span>),
+    (<span class="str">'Wheat'</span>,    <span class="str">'Fall/Winter'</span>,   <span class="num">180</span>,  <span class="num">0.0</span>, <span class="num">25.0</span>, <span class="str">'Low'</span>),
+    (<span class="str">'Barley'</span>,   <span class="str">'Spring'</span>,        <span class="num">90</span>,   <span class="num">5.0</span>, <span class="num">22.0</span>, <span class="str">'Medium'</span>),
+    (<span class="str">'Oats'</span>,     <span class="str">'Spring'</span>,        <span class="num">80</span>,   <span class="num">7.0</span>, <span class="num">20.0</span>, <span class="str">'Medium'</span>);
+  </pre>
+</div>
+
+<!-- Sample Members -->
+<div class="card">
+  <div class="card-title">👥 Sample Data: Members <span class="badge">Data/SampleData</span></div>
+  <pre>
+<span class="kw">INSERT INTO</span> <span class="tbl">Members.MemberAccounts</span>
+    (<span class="col">MemberNumber</span>, <span class="col">FirstName</span>, <span class="col">LastName</span>, <span class="col">Email</span>, <span class="col">PhoneNumber</span>, <span class="col">MembershipDate</span>, <span class="col">Status</span>)
+<span class="kw">VALUES</span>
+    (<span class="str">'M001'</span>, <span class="str">'John'</span>,   <span class="str">'Smith'</span>,    <span class="str">'jsmith@email.com'</span>,     <span class="str">'555-0101'</span>, <span class="str">'2020-01-15'</span>, <span class="str">'Active'</span>),
+    (<span class="str">'M002'</span>, <span class="str">'Mary'</span>,   <span class="str">'Johnson'</span>,  <span class="str">'mjohnson@email.com'</span>,   <span class="str">'555-0102'</span>, <span class="str">'2019-05-20'</span>, <span class="str">'Active'</span>),
+    (<span class="str">'M003'</span>, <span class="str">'Robert'</span>, <span class="str">'Williams'</span>, <span class="str">'rwilliams@email.com'</span>,  <span class="str">'555-0103'</span>, <span class="str">'2021-03-10'</span>, <span class="str">'Active'</span>);
+  </pre>
+</div>
+
+</body>
+</html>
