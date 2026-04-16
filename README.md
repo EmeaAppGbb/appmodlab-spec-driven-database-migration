@@ -306,4 +306,93 @@ greenharvest-db/
 
 ---
 
+## 📋 SOLUTION WALKTHROUGH
+
+> Complete step-by-step execution using **GitHub Copilot CLI** (`gh copilot`).  
+> All outputs are on the `solution-final` branch under `assets/outputs/`.
+
+### Setup
+
+```powershell
+cd C:\code\gbb\labs\appmodlab-spec-driven-database-migration
+git checkout main && git checkout -b solution-final
+New-Item -ItemType Directory -Force -Path assets/outputs
+```
+
+### Step 01 — Explore Legacy Database
+**Tag:** `step-01-explore-legacy-db` · **Output:** `assets/outputs/step-01-explore-legacy-db.md`
+
+```powershell
+gh copilot -- -p "Analyze the GreenHarvest Agricultural Co-op legacy SQL Server database in this repository. Explore Schema/ directory (Tables, StoredProcedures, Functions, Triggers, Views), Data/ (SeedData, SampleData), Specs/, and Migration/ folders. Produce a comprehensive analysis document at assets/outputs/step-01-explore-legacy-db.md covering: 1) Complete inventory of all database objects (6 tables across CropManagement, Members, Inventory, Trading schemas), 2) Column details with data types, constraints, defaults, indexes, 3) Foreign key relationships and referential integrity map, 4) Stored procedures with business rule extraction, 5) Scalar function fn_CalculateYieldBushels with conversion factors, 6) Trigger tr_AuditHarvestChanges behavior and audit log structure, 7) View vw_FieldProductivity definition and joins, 8) Data patterns from seed/sample data, 9) SQL Server-specific features (GEOGRAPHY, IDENTITY, MONEY, computed columns, PERSISTED, GETDATE, SUSER_SNAME, FOR JSON AUTO)." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-01.txt"
+git add assets/outputs/step-01* && git commit -m "Step 01: Explore Legacy Database" && git tag step-01-explore-legacy-db
+```
+
+### Step 02 — Generate Database Specification
+**Tag:** `step-02-generate-db-spec` · **Output:** `assets/outputs/step-02-database-specification.md`
+
+```powershell
+gh copilot -- -p "Generate a comprehensive database specification document for the GreenHarvest Agricultural Co-op SQL Server database. Read all files in Schema/, Data/, and Specs/. Create a detailed spec at assets/outputs/step-02-database-specification.md with: complete table catalog (every column, type, constraint), PK/FK relationships, index inventory, stored procedure signatures with business rules, scalar function spec, trigger spec, view definition, cross-reference matrix, and SQL Server-specific feature catalog." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-02.txt"
+git add assets/outputs/step-02* && git commit -m "Step 02: Generate Database Specification" && git tag step-02-generate-db-spec
+```
+
+### Step 03 — Analyze Migration Complexity
+**Tag:** `step-03-analyze-complexity` · **Output:** `assets/outputs/step-03-migration-complexity.md`
+
+```powershell
+gh copilot -- -p "Analyze the migration complexity for migrating the GreenHarvest SQL Server database to PostgreSQL. Create assets/outputs/step-03-migration-complexity.md with: per-table/proc complexity ratings (Low/Medium/High/Critical), SQL Server to PostgreSQL feature mapping table, identified blockers and risks, effort estimation per object, recommended migration order, and risk mitigation strategies." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-03.txt"
+git add assets/outputs/step-03* && git commit -m "Step 03: Analyze Migration Complexity" && git tag step-03-analyze-complexity
+```
+
+### Step 04 — Design Target Schema
+**Tag:** `step-04-design-target-schema` · **Output:** `assets/outputs/step-04-target-schema.md`
+
+```powershell
+gh copilot -- -p "Design the modern target PostgreSQL schema for the GreenHarvest database migration. Create assets/outputs/step-04-target-schema.md with: design principles, schema mapping to snake_case, complete target DDL for all 6 tables, data type conversion table, PL/pgSQL functions, PostgreSQL trigger functions, view definitions, index strategy, and PostGIS extension requirements." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-04.txt"
+git add assets/outputs/step-04* && git commit -m "Step 04: Design Target Schema" && git tag step-04-design-target-schema
+```
+
+### Step 05 — Generate Migration Scripts
+**Tag:** `step-05-migration-scripts` · **Output:** `assets/outputs/step-05-migration-scripts.md`
+
+```powershell
+gh copilot -- -p "Generate complete migration scripts for the GreenHarvest SQL Server to PostgreSQL migration. Create assets/outputs/step-05-migration-scripts.md with: DDL migration (CREATE statements, indexes, constraints, PostGIS), PL/pgSQL functions, audit trigger, view creation, DML seed data conversion, stored procedure migration to PL/pgSQL, rollback scripts, and execution order." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-05.txt"
+git add assets/outputs/step-05* && git commit -m "Step 05: Generate Migration Scripts" && git tag step-05-migration-scripts
+```
+
+### Step 06 — Create Data Validation
+**Tag:** `step-06-data-validation` · **Output:** `assets/outputs/step-06-data-validation.md`
+
+```powershell
+gh copilot -- -p "Create comprehensive data validation queries for the GreenHarvest database migration. Create assets/outputs/step-06-data-validation.md with: row count validation, schema validation, computed column verification, FK integrity checks, index existence verification, stored procedure output comparison, trigger behavior validation, view output comparison, seed data verification, and edge case tests." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-06.txt"
+git add assets/outputs/step-06* && git commit -m "Step 06: Create Data Validation" && git tag step-06-data-validation
+```
+
+### Step 07 — Document Migration Plan
+**Tag:** `step-07-migration-plan` · **Output:** `assets/outputs/step-07-migration-plan.md`
+
+```powershell
+gh copilot -- -p "Create a comprehensive migration plan for the GreenHarvest SQL Server to PostgreSQL migration. Create assets/outputs/step-07-migration-plan.md with: executive summary, pre-migration phase (docker-compose setup), migration phases with timeline, rollback procedures, risk register, validation checklist, communication plan, post-migration tasks, and go/no-go decision criteria." --allow-all-tools --yolo 2>&1 | Tee-Object -FilePath "assets/outputs/step-07.txt"
+git add assets/outputs/step-07* && git commit -m "Step 07: Document Migration Plan" && git tag step-07-migration-plan
+```
+
+### Push
+
+```powershell
+git push origin solution-final --tags
+```
+
+### Output Summary
+
+| Step | Output File | Description |
+|------|-------------|-------------|
+| 01 | `step-01-explore-legacy-db.md` | Legacy database exploration and analysis |
+| 02 | `step-02-database-specification.md` | Comprehensive database specification |
+| 03 | `step-03-migration-complexity.md` | Migration complexity assessment |
+| 04 | `step-04-target-schema.md` | Target PostgreSQL schema design |
+| 05 | `step-05-migration-scripts.md` | DDL + DML migration scripts |
+| 06 | `step-06-data-validation.md` | Data validation queries and procedures |
+| 07 | `step-07-migration-plan.md` | Full migration plan with rollback |
+
+---
+
 🌌 **May your schemas be normalized and your migrations be lossless!** 🌌
