@@ -1,0 +1,141 @@
+ÔùÅ List directory Schema
+  Ôöö 5 files found
+
+ÔùÅ List directory assets
+  Ôöö 3 files found
+
+ÔùÅ List directory Migration
+  Ôöö 2 files found
+
+ÔùÅ List directory Schema\Functions
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables
+  Ôöö 4 files found
+
+ÔùÅ List directory Schema\StoredProcedures
+  Ôöö 2 files found
+
+ÔùÅ List directory Schema\Views
+  Ôöö 1 file found
+
+ÔùÅ List directory assets\outputs
+  Ôöö 7 files found
+
+ÔùÅ List directory Migration\Scripts
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Triggers
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Trading
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\CropManagement
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema\Tables\Members
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Inventory
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\CropPlanning
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions\Scalar
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\Settlement
+  Ôöö 1 file found
+
+Now let me read all source files in parallel:
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Schema\Tables\CropManagement\CropTypes.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read Harvests.sql
+  Ôöé Schema\Tables\CropManagement\Harvests.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read Fields.sql
+  Ôöé Schema\Tables\CropManagement\Fields.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read FertilizerStock.sql
+  Ôöé Schema\Tables\Inventory\FertilizerStock.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read MemberAccounts.sql
+  Ôöé Schema\Tables\Members\MemberAccounts.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read CommodityPrices.sql
+  Ôöé Schema\Tables\Trading\CommodityPrices.sql
+  Ôöö 11 lines read
+
+ÔùÅ Read tr_AuditHarvestChanges.sql
+  Ôöé Schema\Triggers\tr_AuditHarvestChanges.sql
+  Ôöö 27 lines read
+
+ÔùÅ Read fn_CalculateYieldBushels.sql
+  Ôöé Schema\Functions\Scalar\fn_CalculateYieldBushels.sql
+  Ôöö 22 lines read
+
+ÔùÅ Read vw_FieldProductivity.sql
+  Ôöé Schema\Views\vw_FieldProductivity.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read sp_CalculateOptimalRotation.sql
+  Ôöé Schema\StoredProcedures\CropPlanning\sp_CalculateOptimalRotation.sql
+  Ôöö 46 lines read
+
+ÔùÅ Read sp_CalculateMemberPayment.sql
+  Ôöé Schema\StoredProcedures\Settlement\sp_CalculateMemberPayment.sql
+  Ôöö 50 lines read
+
+ÔùÅ Read 001_create_schema.sql
+  Ôöé Migration\Scripts\001_create_schema.sql
+  Ôöö 122 lines read
+
+Now let me also check the existing output files for context:
+
+ÔùÅ Read step-02-database-specification.md
+  Ôöé assets\outputs\step-02-database-specification.md
+  Ôöö 1 line read
+
+ÔùÅ Read step-04.txt
+  Ôöé assets\outputs\step-04.txt
+  Ôöö 106 lines read
+
+ÔùÅ Read step-02-database-specification.md
+  Ôöé assets\outputs\step-02-database-specification.md
+  Ôöö L1:50 (50 lines read)
+
+ÔùÅ Read step-03-migration-complexity.md
+  Ôöé assets\outputs\step-03-migration-complexity.md
+  Ôöö L1:50 (49 lines read)
+
+ÔùÅ Create step-04-target-schema.md +778
+  Ôöö assets\outputs\step-04-target-schema.md
+
+The document has been created at `assets/outputs/step-04-target-schema.md`. It covers all 10 requested sections:
+
+1. **Design principles** ÔÇö snake_case, PostgreSQL idioms, PostGIS
+2. **Schema mapping** ÔÇö all 4 source schemas + audit + procedure schema consolidation
+3. **Complete DDL** for all 7 tables (6 source + audit log) with full column mappings
+4. **Data type conversion table** ÔÇö IDENTITYÔåÆSERIAL, NVARCHARÔåÆVARCHAR, MONEYÔåÆNUMERIC(19,4), GEOGRAPHYÔåÆGEOMETRY(POLYGON,4326), DATETIMEÔåÆTIMESTAMP, PERSISTEDÔåÆGENERATED ALWAYS AS STORED
+5. **PL/pgSQL function** ÔÇö `calculate_yield_bushels` marked `IMMUTABLE`
+6. **Trigger function** ÔÇö uses `TG_OP`, `row_to_json()`, `current_user`, `JSONB`
+7. **View** ÔÇö `vw_field_productivity` with `||` concatenation
+8. **Index strategy** ÔÇö 13 B-tree + 1 GiST spatial index
+9. **Extension requirements** ÔÇö `postgis`
+10. **Naming convention mapping** ÔÇö full PascalCaseÔåÆsnake_case reference
+
+Also includes stored procedure conversions, audit table design, and a dependency-ordered execution plan.
+
+
+Changes   +778 -0
+Requests  3 Premium (3m 4s)
+Tokens    Ôåæ 258.0k ÔÇó Ôåô 13.4k ÔÇó 214.1k (cached)
