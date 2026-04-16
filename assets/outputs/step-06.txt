@@ -1,0 +1,180 @@
+ÔùÅ List directory .
+  Ôöö 11 files found
+
+ÔùÅ List directory Data
+  Ôöö 2 files found
+
+ÔùÅ List directory Schema
+  Ôöö 5 files found
+
+ÔùÅ List directory Migration
+  Ôöö 2 files found
+
+ÔùÅ List directory assets
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema\Tables
+  Ôöö 4 files found
+
+ÔùÅ List directory Schema\Functions
+  Ôöö 1 file found
+
+ÔùÅ List directory Data\SampleData
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Triggers
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures
+  Ôöö 2 files found
+
+ÔùÅ List directory Migration\Validation
+  Ôöö 1 file found
+
+ÔùÅ List directory Data\SeedData
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Views
+  Ôöö 1 file found
+
+ÔùÅ List directory assets\outputs
+  Ôöö 11 files found
+
+ÔùÅ List directory Migration\Scripts
+  Ôöö 1 file found
+
+Now let me read all the relevant files in parallel:
+
+Ô£ù Read Members.sql
+  Ôöé Data\SeedData\Members.sql
+  Ôöö Path does not exist
+
+ÔùÅ Read validation_queries.sql
+  Ôöé Migration\Validation\validation_queries.sql
+  Ôöö 61 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Data\SeedData\CropTypes.sql
+  Ôöö 8 lines read
+
+ÔùÅ Read vw_FieldProductivity.sql
+  Ôöé Schema\Views\vw_FieldProductivity.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read Members.sql
+  Ôöé Data\SampleData\Members.sql
+  Ôöö 6 lines read
+
+ÔùÅ Read tr_AuditHarvestChanges.sql
+  Ôöé Schema\Triggers\tr_AuditHarvestChanges.sql
+  Ôöö 27 lines read
+
+ÔùÅ List directory Schema\StoredProcedures\CropPlanning
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions\Scalar
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\Settlement
+  Ôöö 1 file found
+
+ÔùÅ Read fn_CalculateYieldBushels.sql
+  Ôöé Schema\Functions\Scalar\fn_CalculateYieldBushels.sql
+  Ôöö 22 lines read
+
+ÔùÅ Read 001_create_schema.sql
+  Ôöé Migration\Scripts\001_create_schema.sql
+  Ôöö 122 lines read
+
+ÔùÅ Read sp_CalculateMemberPayment.sql
+  Ôöé Schema\StoredProcedures\Settlement\sp_CalculateMemberPayment.sql
+  Ôöö 50 lines read
+
+ÔùÅ Read sp_CalculateOptimalRotation.sql
+  Ôöé Schema\StoredProcedures\CropPlanning\sp_CalculateOptimalRotation.sql
+  Ôöö 46 lines read
+
+ÔùÅ Read step-06.txt
+  Ôöé assets\outputs\step-06.txt
+  Ôöö 95 lines read
+
+Now let me read the remaining table schemas:
+
+ÔùÅ Search (glob)
+  Ôöé "Schema\Tables\**\*.sql"
+  Ôöö No matches found
+
+ÔùÅ List directory Schema\Tables\Members
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Inventory
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\CropManagement
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema\Tables\Trading
+  Ôöö 1 file found
+
+ÔùÅ Read step-05-migration-scripts.md
+  Ôöé assets\outputs\step-05-migration-scripts.md
+  Ôöö 1 line read
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö 1 line read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Schema\Tables\CropManagement\CropTypes.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read MemberAccounts.sql
+  Ôöé Schema\Tables\Members\MemberAccounts.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read Harvests.sql
+  Ôöé Schema\Tables\CropManagement\Harvests.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read Fields.sql
+  Ôöé Schema\Tables\CropManagement\Fields.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read CommodityPrices.sql
+  Ôöé Schema\Tables\Trading\CommodityPrices.sql
+  Ôöö 11 lines read
+
+ÔùÅ Read FertilizerStock.sql
+  Ôöé Schema\Tables\Inventory\FertilizerStock.sql
+  Ôöö 14 lines read
+
+ÔùÅ Create step-06-data-validation.md +1258
+  Ôöö assets\outputs\step-06-data-validation.md
+
+The file has been created. Let me verify it:
+
+ÔùÅ Verify file line count (shell)
+  Ôöé (Get-Content "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\asse
+  Ôöé ts\outputs\step-06-data-validation.md" | Measure-Object -Line -Word).Lines
+  Ôöö 2 lines...
+
+Created `assets/outputs/step-06-data-validation.md` (1,041 lines) covering all 13 validation areas:
+
+1. **Row counts** ÔÇö side-by-side SQL Server/PostgreSQL queries for all 6 tables
+2. **Schema validation** ÔÇö full column mapping table with types, nullability, defaults
+3. **Computed columns** ÔÇö yield_bushels spot checks for all 5 unit types (bushels, tonnes, hundredweight, kilograms, unknown) plus full-table diff query
+4. **FK integrity** ÔÇö orphan checks for fieldsÔåÆmembers, harvestsÔåÆfields, pricesÔåÆcrop_types, harvestsÔåÆcrop_types, fieldsÔåÆcrop_types
+5. **Index verification** ÔÇö expected 10 indexes with existence check query
+6. **Constraints** ÔÇö UNIQUE enforcement test, NOT NULL tests, PK/FK listing
+7. **Data type fidelity** ÔÇö MONEYÔåÆNUMERIC(19,4) precision, GEOGRAPHYÔåÆGEOMETRY/PostGIS, NVARCHARÔåÆVARCHAR encoding, DATETIMEÔåÆTIMESTAMP
+8. **Stored procedures** ÔÇö sp_CalculateOptimalRotation and sp_CalculateMemberPayment cross-database comparison
+9. **Trigger behavior** ÔÇö INSERT/UPDATE/DELETE audit log tests with cleanup
+10. **View comparison** ÔÇö vw_field_productivity column-by-column matching
+11. **Seed data** ÔÇö exact value checks for 5 CropTypes and 3 Members with automated PASS/FAIL queries
+12. **Edge cases** ÔÇö NULL handling, boundary values, empty strings, zero/negative yields, sequence continuity
+13. **Performance baselines** ÔÇö EXPLAIN ANALYZE for scans, index lookups, joins, spatial, and aggregation queries
+
+
+Changes   +1258 -0
+Requests  3 Premium (3m 56s)
+Tokens    Ôåæ 349.5k ÔÇó Ôåô 17.6k ÔÇó 304.1k (cached)
