@@ -1,0 +1,198 @@
+ÔùÅ List directory .
+  Ôöö 11 files found
+
+ÔùÅ List directory Data
+  Ôöö 2 files found
+
+ÔùÅ List directory assets
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema
+  Ôöö 5 files found
+
+ÔùÅ List directory Specs
+  Ôöö 1 file found
+
+ÔùÅ List directory Migration
+  Ôöö 2 files found
+
+ÔùÅ List directory assets\outputs
+  Ôöö 9 files found
+
+ÔùÅ List directory Data\SampleData
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables
+  Ôöö 4 files found
+
+ÔùÅ List directory Schema\StoredProcedures
+  Ôöö 2 files found
+
+ÔùÅ List directory Schema\Views
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Triggers
+  Ôöö 1 file found
+
+ÔùÅ List directory Data\SeedData
+  Ôöö 1 file found
+
+ÔùÅ List directory Migration\Scripts
+  Ôöö 1 file found
+
+ÔùÅ List directory Migration\Validation
+  Ôöö 1 file found
+
+ÔùÅ List directory Specs\schema-spec
+  Ôöö 1 file found
+
+Now let me read all the source files in parallel:
+
+ÔùÅ List directory Schema\Tables\CropManagement
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema\Tables\Members
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Inventory
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\Settlement
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Functions\Scalar
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\Tables\Trading
+  Ôöö 1 file found
+
+ÔùÅ List directory Schema\StoredProcedures\CropPlanning
+  Ôöö 1 file found
+
+ÔùÅ Read Harvests.sql
+  Ôöé Schema\Tables\CropManagement\Harvests.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read Fields.sql
+  Ôöé Schema\Tables\CropManagement\Fields.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Schema\Tables\CropManagement\CropTypes.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read FertilizerStock.sql
+  Ôöé Schema\Tables\Inventory\FertilizerStock.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read MemberAccounts.sql
+  Ôöé Schema\Tables\Members\MemberAccounts.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read CommodityPrices.sql
+  Ôöé Schema\Tables\Trading\CommodityPrices.sql
+  Ôöö 11 lines read
+
+ÔùÅ Read fn_CalculateYieldBushels.sql
+  Ôöé Schema\Functions\Scalar\fn_CalculateYieldBushels.sql
+  Ôöö 22 lines read
+
+ÔùÅ Read sp_CalculateOptimalRotation.sql
+  Ôöé Schema\StoredProcedures\CropPlanning\sp_CalculateOptimalRotation.sql
+  Ôöö 46 lines read
+
+ÔùÅ Read sp_CalculateMemberPayment.sql
+  Ôöé Schema\StoredProcedures\Settlement\sp_CalculateMemberPayment.sql
+  Ôöö 50 lines read
+
+ÔùÅ Read tr_AuditHarvestChanges.sql
+  Ôöé Schema\Triggers\tr_AuditHarvestChanges.sql
+  Ôöö 27 lines read
+
+ÔùÅ Read vw_FieldProductivity.sql
+  Ôöé Schema\Views\vw_FieldProductivity.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Data\SeedData\CropTypes.sql
+  Ôöö 8 lines read
+
+ÔùÅ Read 001_create_schema.sql
+  Ôöé Migration\Scripts\001_create_schema.sql
+  Ôöö 122 lines read
+
+ÔùÅ Read Members.sql
+  Ôöé Data\SampleData\Members.sql
+  Ôöö 6 lines read
+
+ÔùÅ Read validation_queries.sql
+  Ôöé Migration\Validation\validation_queries.sql
+  Ôöö 61 lines read
+
+Now let me read the existing output files and the spec for additional context:
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö 1 line read
+
+ÔùÅ Read step-05.txt
+  Ôöé assets\outputs\step-05.txt
+  Ôöö 139 lines read
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L1:80 (80 lines read)
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L80:200 (120 lines read)
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L200:400 (200 lines read)
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L400:550 (151 lines read)
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L550:700 (151 lines read)
+
+ÔùÅ Read step-04-target-schema.md
+  Ôöé assets\outputs\step-04-target-schema.md
+  Ôöö L700:800 (78 lines read)
+
+I now have all the context needed. Let me create the comprehensive migration scripts document.
+
+ÔùÅ Create step-05-migration-scripts.md +1108
+  Ôöö assets\outputs\step-05-migration-scripts.md
+
+The file has been created. Let me verify it:
+
+ÔùÅ Verify file size (shell)
+  Ôöé (Get-Item "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\assets\
+  Ôöé outputs\step-05-migration-scripts.md").Length
+  Ôöö 2 lines...
+
+Created `assets/outputs/step-05-migration-scripts.md` (50KB) with all 9 requested sections:
+
+1. **DDL Migration** ÔÇö PostGIS extension, 5 schemas, 7 tables (all 4 schema groups including `audit`), 15 indexes (14 B-tree + 1 GiST), 5 foreign keys, CHECK constraint
+2. **PL/pgSQL `calculate_yield_bushels`** ÔÇö IMMUTABLE function with unit conversion logic
+3. **Audit trigger** ÔÇö `fn_audit_harvest_changes()` using `TG_OP`/`row_to_json()`/`current_user` + trigger binding
+4. **View `vw_field_productivity`** ÔÇö with `||` concatenation and snake_case columns
+5. **DML scripts** ÔÇö CropTypes seed data + Members sample data with PostgreSQL syntax
+6. **Stored procedures** ÔÇö `calculate_optimal_rotation` (`RETURNS TABLE`) and `calculate_member_payment` (`RETURNS NUMERIC`) with `BEGIN`/`END` delimiters
+7. **Rollback scripts** ÔÇö DROP statements in reverse dependency order
+8. **Execution order** ÔÇö dependency diagram with critical notes
+9. **Pre/post-migration checklists** ÔÇö 10 pre-migration + 16 post-migration validation items
+
+Also includes a complete single-transaction migration script in Appendix A.
+
+
+Changes   +1108 -0
+Requests  3 Premium (4m 23s)
+Tokens    Ôåæ 577.4k ÔÇó Ôåô 18.9k ÔÇó 513.5k (cached)
