@@ -1,0 +1,126 @@
+ÔùÅ List directory .
+  Ôöö 11 files found
+
+ÔùÅ List directory Data
+  Ôöö 2 files found
+
+ÔùÅ List directory assets
+  Ôöö 3 files found
+
+ÔùÅ List directory Schema
+  Ôöö 5 files found
+
+ÔùÅ List directory Specs
+  Ôöö 1 file found
+
+ÔùÅ Search (glob)
+  Ôöé "Specs/**/*"
+  Ôöö 1 file found
+
+ÔùÅ Search (glob)
+  Ôöé "assets/outputs/*"
+  Ôöö 3 files found
+
+ÔùÅ Search (glob)
+  Ôöé "Data/**/*"
+  Ôöö 2 files found
+
+ÔùÅ Search (glob)
+  Ôöé "Schema/**/*"
+  Ôöö 11 files found
+
+Now let me read all files in parallel:
+
+ÔùÅ Read MemberAccounts.sql
+  Ôöé Schema\Tables\Members\MemberAccounts.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read CommodityPrices.sql
+  Ôöé Schema\Tables\Trading\CommodityPrices.sql
+  Ôöö 11 lines read
+
+ÔùÅ Read Harvests.sql
+  Ôöé Schema\Tables\CropManagement\Harvests.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Schema\Tables\CropManagement\CropTypes.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read FertilizerStock.sql
+  Ôöé Schema\Tables\Inventory\FertilizerStock.sql
+  Ôöö 14 lines read
+
+ÔùÅ Read Fields.sql
+  Ôöé Schema\Tables\CropManagement\Fields.sql
+  Ôöö 17 lines read
+
+ÔùÅ Read sp_CalculateMemberPayment.sql
+  Ôöé Schema\StoredProcedures\Settlement\sp_CalculateMemberPayment.sql
+  Ôöö 50 lines read
+
+ÔùÅ Read fn_CalculateYieldBushels.sql
+  Ôöé Schema\Functions\Scalar\fn_CalculateYieldBushels.sql
+  Ôöö 22 lines read
+
+ÔùÅ Read sp_CalculateOptimalRotation.sql
+  Ôöé Schema\StoredProcedures\CropPlanning\sp_CalculateOptimalRotation.sql
+  Ôöö 46 lines read
+
+ÔùÅ Read tr_AuditHarvestChanges.sql
+  Ôöé Schema\Triggers\tr_AuditHarvestChanges.sql
+  Ôöö 27 lines read
+
+ÔùÅ Read database-specification.md
+  Ôöé Specs\schema-spec\database-specification.md
+  Ôöö 152 lines read
+
+ÔùÅ Read vw_FieldProductivity.sql
+  Ôöé Schema\Views\vw_FieldProductivity.sql
+  Ôöö 19 lines read
+
+ÔùÅ Read Members.sql
+  Ôöé Data\SampleData\Members.sql
+  Ôöö 6 lines read
+
+ÔùÅ Read CropTypes.sql
+  Ôöé Data\SeedData\CropTypes.sql
+  Ôöö 8 lines read
+
+Now I have all source files. Let me create the comprehensive specification document.
+
+ÔùÅ Check output directory exists (shell)
+  Ôöé Test-Path
+  Ôöé "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\assets\outputs"
+  Ôöö 2 lines...
+
+ÔùÅ Create step-02-database-specification.md +682
+  Ôöö assets\outputs\step-02-database-specification.md
+
+The specification has been written. Let me verify it rendered correctly:
+
+ÔùÅ Verify spec file stats (shell)
+  Ôöé (Get-Content "C:\code\gbb\labs\appmodlab-spec-driven-database-migration\asse
+  Ôöé ts\outputs\step-02-database-specification.md" | Measure-Object -Line -Word
+  Ôöé -Character) | Format-List
+  Ôöö 5 lines...
+
+The comprehensive database specification has been created at `assets/outputs/step-02-database-specification.md` ÔÇö **507 lines** covering all 12 requested sections:
+
+1. **Executive summary** ÔÇö 6 schemas, design overview
+2. **Table catalog** ÔÇö all 7 tables (6 explicit + 1 implied audit) with every column's type, nullability, defaults, constraints
+3. **Primary keys & IDENTITY** ÔÇö all use `INT IDENTITY(1,1)`
+4. **Foreign keys** ÔÇö 5 FKs, all `NO ACTION` cascade
+5. **Index inventory** ÔÇö 17 indexes cataloged
+6. **Stored procedures** ÔÇö full parameter lists, business rules (quality multiplier matrix, rotation scoring formula)
+7. **Scalar function** ÔÇö conversion factor table (bushels/tonnes/cwt/kg)
+8. **Trigger spec** ÔÇö event mapping, audit schema, noted the DELETE guard-clause bug
+9. **View definition** ÔÇö source tables, join conditions, GROUP BY
+10. **Cross-reference matrix** ÔÇö read/write dependency table + schema dependency graph
+11. **Data volume estimates** ÔÇö seed/sample data + production projections
+12. **SQL Server features** ÔÇö GEOGRAPHY, MONEY, PERSISTED, SUSER_SNAME, FOR JSON AUTO, IDENTITY, GETDATE, NVARCHAR
+
+
+Changes   +682 -0
+Requests  3 Premium (3m 18s)
+Tokens    Ôåæ 264.7k ÔÇó Ôåô 12.3k ÔÇó 216.6k (cached)
